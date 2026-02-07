@@ -1,0 +1,6 @@
+node_modules/
+backups/
+uploads/
+db_error.log
+database.sqlite
+.env

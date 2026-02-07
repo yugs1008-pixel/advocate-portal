@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advocate Name | Premium Legal Services</title>
+    <meta name="description" content="Professional legal advice and e-stamp services for all your legal needs.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">Advocate <span>Practice</span></div>
+            <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#services">Practice Areas</a></li>
+                <li><a href="#e-stamp">E-Stamp Form</a></li>
+                <li><a href="#" id="myAppsLink">My Applications</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero">
+            <div class="hero-content">
+                <h1>Excellence In <br><span>Legal Representation</span></h1>
+                <p>Providing sophisticated legal solutions and streamlined e-stamping services with absolute integrity
+                    and clinical precision.</p>
+                <div class="hero-btns">
+                    <a href="#e-stamp" class="btn primary">E-Stamp Application</a>
+                    <a href="#services" class="btn secondary">View Services</a>
+                </div>
+            </div>
+            <!-- Professional imagery would go here -->
+        </section>
+
+        <section id="services" class="services">
+            <div class="section-title">
+                <h2>Our Practice Areas</h2>
+                <div class="underline"></div>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="icon">🔍</div>
+                    <h3>Legal Advisory</h3>
+                    <p>Comprehensive legal counsel for corporate compliance, dispute evaluation, and strategic planning.
+                    </p>
+                </div>
+                <div class="service-card">
+                    <div class="icon">�️</div>
+                    <h3>E-Stamping</h3>
+                    <p>Seamless and secure generation of e-stamp certificates with end-to-end digital processing.</p>
+                </div>
+                <div class="service-card">
+                    <div class="icon">⚖️</div>
+                    <h3>Civil Litigation</h3>
+                    <p>Robust representation in civil courts for property disputes, contracts, and commercial law.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="e-stamp" class="e-stamp-section">
+            <div class="estep-header">
+                <h2>E-Stamp Application</h2>
+                <p>Choose your application type and fill out the required specifications.</p>
+            </div>
+
+            <div class="form-container">
+                <div class="form-tabs">
+                    <button class="tab-btn active" data-tab="standard">Standard Form</button>
+                    <button class="tab-btn" data-tab="bulk">Bulk Order</button>
+                    <button class="tab-btn" data-tab="notary">Notary / True Copy</button>
+                </div>
+
+                <!-- Standard Form -->
+                <form id="estampForm" class="estamp-form tab-content active">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="docDescription">Document Description</label>
+                            <input type="text" id="docDescription" name="docDescription"
+                                placeholder="e.g., Lease Deed, Affidavit">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="firstParty">First Party Name (Max 50 chars)</label>
+                            <input type="text" id="firstParty" name="firstParty" maxlength="50"
+                                placeholder="Full Legal Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="secondParty">Second Party Name (Max 50 chars)</label>
+                            <input type="text" id="secondParty" name="secondParty" maxlength="50"
+                                placeholder="Full Legal Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paidBy">Stamp Duty Paid By</label>
+                            <select id="paidBy" name="paidBy">
+                                <option value="">Select Payer</option>
+                                <option value="First Party">First Party</option>
+                                <option value="Second Party">Second Party</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stampAmount">Stamp Duty Amount (₹)</label>
+                            <input type="number" id="stampAmount" name="stampAmount" min="0" placeholder="0.00">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Stamp Quantity</label>
+                            <input type="number" id="quantity" name="quantity" min="1" value="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notary">Notary Required?</label>
+                            <select id="notary" name="notary">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="purpose">Purpose of Purchase</label>
+                            <textarea id="purpose" name="purpose" rows="2"
+                                placeholder="Describe the transaction detail"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="billOn">Bill Required On (Entity Name)</label>
+                            <input type="text" id="billOn" name="billOn" placeholder="Company/Individual">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactPerson">Client Contact Person</label>
+                            <input type="text" id="contactPerson" name="contactPerson" placeholder="Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactNumber">Contact Mobile</label>
+                            <input type="tel" id="contactNumber" name="contactNumber" pattern="[0-9]{10}"
+                                placeholder="Phone Number">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="remarks">Additional Remarks</label>
+                            <textarea id="remarks" name="remarks" rows="3"
+                                placeholder="Specify any peculiar requirements"></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="attachments">Attachments (Multiple files allowed)</label>
+                            <input type="file" id="attachments" name="attachments" multiple style="padding: 0.5rem 0;">
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Upload
+                                supporting documents, ID proofs, etc.</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Execute Application</button>
+                </form>
+
+                <!-- Bulk Order Form -->
+                <form id="bulkForm" class="estamp-form tab-content">
+                    <div class="form-grid">
+                        <div id="bulkPartyContainer" class="full-width"
+                            style="display: grid; grid-template-columns: 1fr 1fr 0.5fr; gap: 20px; grid-column: span 2;">
+                            <div class="form-group">
+                                <label for="bulkFirstParty">First Party Name (Max 50 chars)</label>
+                                <input type="text" name="firstParty[]" maxlength="50" placeholder="Full Legal Name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bulkSecondParty">Second Party Name (Max 50 chars)</label>
+                                <input type="text" name="secondParty[]" maxlength="50" placeholder="Full Legal Name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="bulkQuantity">Quantity</label>
+                                <input type="number" name="quantity[]" min="1" value="1">
+                            </div>
+                        </div>
+
+                        <div id="additionalParties" class="full-width"
+                            style="display: block; width: 100%; grid-column: span 2;">
+                            <!-- Dynamic party pairs will appear here -->
+                        </div>
+
+                        <div class="form-group full-width">
+                            <button type="button" id="addStampBtn" class="btn secondary"
+                                style="width: auto; padding: 0.6rem 1.2rem; font-size: 0.85rem; background: #f0f4f8; border: 1px dashed var(--accent-gold); color: var(--primary-color);">
+                                ➕ Add More Stamps (First/Second Party)
+                            </button>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="bulkBillOn">Bill Required On</label>
+                            <input type="text" id="bulkBillOn" name="billOn" placeholder="Entity Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bulkContactPerson">Contact Person</label>
+                            <input type="text" id="bulkContactPerson" name="contactPerson" placeholder="Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bulkContactNumber">Contact Number</label>
+                            <input type="tel" id="bulkContactNumber" name="contactNumber" pattern="[0-9]{10}"
+                                placeholder="Mobile Number">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="bulkAttachments">Attachments (Multiple files allowed)</label>
+                            <input type="file" id="bulkAttachments" name="attachments" multiple
+                                style="padding: 0.5rem 0;">
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Upload
+                                spreadsheets, data sheets, etc.</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Execute Bulk Order</button>
+                </form>
+
+                <!-- Notary / True Copy Form -->
+                <form id="notaryForm" class="estamp-form tab-content">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="notaryDocType">Type of Document</label>
+                            <input type="text" id="notaryDocType" name="docType"
+                                placeholder="e.g., Degree Certificate, Passport Copy">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notaryBillOn">Bill Required On</label>
+                            <input type="text" id="notaryBillOn" name="billOn" placeholder="Entity Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notaryContactPerson">Contact Person</label>
+                            <input type="text" id="notaryContactPerson" name="contactPerson" placeholder="Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notaryContactNumber">Contact Number</label>
+                            <input type="tel" id="notaryContactNumber" name="contactNumber" pattern="[0-9]{10}"
+                                placeholder="Mobile Number">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="notaryAttachments">Attachments (Multiple files allowed)</label>
+                            <input type="file" id="notaryAttachments" name="attachments" multiple
+                                style="padding: 0.5rem 0;">
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Upload
+                                high-quality scans of original documents.</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Execute Notary Request</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="contact-card">
+                <h2>Office Information</h2>
+                <div class="contact-info">
+                    <p>📍 Lex Chamber, First Floor, Court District, City</p>
+                    <p>📞 +91 942 630 1234</p>
+                    <p>📧 contact@legalpractice.in</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <footer>
+        <p>&copy; 2026 LegalPro Advocate. All Rights Reserved.</p>
+    </footer>
+
+    <!-- My Applications Modal -->
+    <div id="appsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>My Applications</h2>
+                <span class="close-modal"
+                    onclick="document.getElementById('appsModal').style.display='none'">&times;</span>
+            </div>
+            <div id="appsList" class="apps-grid">
+                <!-- Applications will be loaded here -->
+                <div class="loading-spinner">Loading your applications...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Form View Modal -->
+    <div id="fullFormModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>Application Details</h2>
+                <span class="close-modal"
+                    onclick="document.getElementById('fullFormModal').style.display='none'">&times;</span>
+            </div>
+            <div id="fullFormContent" style="padding: 2rem; max-height: 70vh; overflow-y: auto;">
+                <!-- Full form content will be injected here -->
+            </div>
+            <div style="padding: 1.5rem; text-align: right; border-top: 1px solid #eee;">
+                <button onclick="window.print()" class="btn secondary" style="margin-right: 10px;">打印 (Print)</button>
+                <button onclick="document.getElementById('fullFormModal').style.display='none'"
+                    class="btn primary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
