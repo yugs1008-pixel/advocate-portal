@@ -187,6 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchUserApplications() {
         const user = JSON.parse(localStorage.getItem('advocate_user'));
+
+        if (!user || !user.email) {
+            console.warn('User session invalid, redirecting to login.');
+            window.location.href = 'login.html';
+            return;
+        }
+
         const appsList = document.getElementById('appsList');
 
         // Initial loading state only if table doesn't exist
@@ -194,8 +201,11 @@ document.addEventListener('DOMContentLoaded', () => {
             appsList.innerHTML = '<div class="loading-spinner">Fetching your legal applications...</div>';
         }
 
+        const fetchUrl = `${window.location.origin}/api/applications?userEmail=${encodeURIComponent(user.email)}&t=${Date.now()}`;
+        console.log('Fetching:', fetchUrl);
+
         try {
-            const response = await fetch(`/api/applications?userEmail=${user.email}`);
+            const response = await fetch(fetchUrl);
             if (response.ok) {
                 allUserApplications = await response.json();
 
@@ -207,7 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Update rows with fetched data
                 updateAppTableRows(allUserApplications);
             } else {
-                appsList.innerHTML = `<div class="no-apps">Failed to load applications (Error ${response.status}).</div>`;
+                const errText = await response.text();
+                throw new Error(`Server returned ${response.status}: ${errText}`);
             }
         } catch (err) {
             console.error('Fetch Error Details:', err);
