@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${app.id}</td>
                     <td>${billNo}</td>
                     <td>${billName}</td>
+                    <td>${billAmt}</td>
                     <td>
                         <select class="status-select" onchange="updatePaymentStatus(${app.id}, this.value)">
                             <option value="Unpaid" ${app.payment_status === 'Unpaid' ? 'selected' : ''}>Unpaid</option>
@@ -83,11 +84,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${userName}</td>
                     <td>${userPhone}</td>
                     <td><strong>${app.userEmail}</strong></td>
+                    <td>
+                        <select class="status-select ${app.paymentStatus === 'Cancelled' ? 'status-cancelled' : ''}" onchange="updateAppStatus(${app.id}, this.value)">
+                            <option value="Pending" ${app.paymentStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Completed" ${app.paymentStatus === 'Completed' ? 'selected' : ''}>Completed</option>
+                            <option value="Processing" ${app.paymentStatus === 'Processing' ? 'selected' : ''}>Processing</option>
+                            <option value="Cancelled" ${app.paymentStatus === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                    </td>
                     <td>${app.type}</td>
                     <td><span class="expand-btn" onclick="toggleDetails(${app.id})">Details ➕</span></td>
                 </tr>
                 <tr id="details-${app.id}" class="detail-row">
-                    <td colspan="10">
+                    <td colspan="12">
                         <div style="padding: 1.5rem; line-height: 1.6;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
