@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr data-id="${app.id}">
                     <td>${date}</td>
                     <td>${app.id}</td>
+                    <td>${app.type}</td>
                     <td>
                         <select class="status-select ${app.paymentStatus === 'Cancelled' ? 'status-cancelled' : ''}" onchange="updateAppStatus(${app.id}, this.value)">
                             <option value="Pending" ${app.paymentStatus === 'Pending' ? 'selected' : ''}>Pending</option>
@@ -79,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <option value="Cancelled" ${app.paymentStatus === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
                         </select>
                     </td>
-                    <td>${app.type}</td>
                     <td>${billNo}</td>
                     <td>${billName}</td>
                     <td>${billAmt}</td>

@@ -213,8 +213,8 @@
                     <tr>
                         <th style="font-size: 0.75rem;">Date</th>
                         <th style="font-size: 0.75rem;">ID</th>
-                        <th style="font-size: 0.75rem;">Status</th>
                         <th style="font-size: 0.75rem;">Type</th>
+                        <th style="font-size: 0.75rem;">Status</th>
                         <th style="font-size: 0.75rem;">Bill No.</th>
                         <th style="font-size: 0.75rem;">Billing Name</th>
                         <th style="font-size: 0.75rem;">Amount</th>
@@ -229,6 +229,8 @@
                                 style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
                         <th><input type="text" id="filterId" placeholder="ID" onkeyup="filterOperatorTable()"
                                 style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
+                        <th><input type="text" id="filterType" placeholder="Type" onkeyup="filterOperatorTable()"
+                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
                         <th>
                             <select id="filterStatus" onchange="filterOperatorTable()"
                                 style="width: 100%; padding: 2px; font-size: 0.7em;">
@@ -239,8 +241,6 @@
                                 <option value="Cancelled">Cancelled</option>
                             </select>
                         </th>
-                        <th><input type="text" id="filterType" placeholder="Type" onkeyup="filterOperatorTable()"
-                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
                         <th><input type="text" id="filterBilNum" placeholder="No." onkeyup="filterOperatorTable()"
                                 style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
                         <th><input type="text" id="filterBilName" placeholder="Bill Name"
