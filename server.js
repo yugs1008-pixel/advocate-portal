@@ -239,12 +239,15 @@ app.post('/api/submit-form', upload.array('attachments'), async (req, res) => {
     }
 
     try {
+        const dataToSave = dbMode === 'sqlite' ? JSON.stringify(applicationData) : applicationData;
+
         const result = await dbQuery(
             'INSERT INTO applications ("userEmail", type, data, "paymentStatus", "payment_status", "billOn") VALUES ($1, $2, $3, $4, $5, $6)',
-            [userEmail, type, applicationData, 'Pending', 'Unpaid', billOn]
+            [userEmail, type, dataToSave, 'Pending', 'Unpaid', billOn]
         );
         res.status(200).json({ id: result.rows[0] ? result.rows[0].id : null });
     } catch (err) {
+        console.error('Submission Error:', err.message);
         res.status(500).json({ error: err.message });
     }
 });

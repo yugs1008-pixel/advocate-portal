@@ -1,17 +1,22 @@
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const { Pool } = require('pg');
 
-const dbPath = path.join(__dirname, 'database.sqlite');
-const db = new sqlite3.Database(dbPath);
-
-db.all("PRAGMA table_info(applications)", (err, rows) => {
-    if (err) {
-        console.error(err);
-        return;
-    }
-    console.log('Columns in applications table:');
-    rows.forEach(row => {
-        console.log(`- ${row.name} (${row.type})`);
-    });
-    db.close();
+// Use default PG config matching server.js
+const pgPool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'advocate_db',
+    password: '1008',
+    port: 5432
 });
+
+(async () => {
+    try {
+        console.log('Connecting to PostgreSQL...');
+        const res = await pgPool.query('SELECT id, "userEmail", "submissionTime", "paymentStatus" FROM applications ORDER BY "submissionTime" DESC LIMIT 5');
+        console.log('Recent Applications:', res.rows);
+    } catch (err) {
+        console.error('Error querying database:', err);
+    } finally {
+        await pgPool.end();
+    }
+})();
