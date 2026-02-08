@@ -9,6 +9,17 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap"
         rel="stylesheet">
+    <script>
+        // --- ROBUST AUTO-REDIRECT TO SERVER ---
+        if (window.location.protocol === 'file:') {
+            const ping = new Image();
+            ping.onload = () => {
+                console.log('🚀 Server detected! Redirecting...');
+                window.location.href = 'http://localhost:3000/operator.html';
+            };
+            ping.src = 'http://localhost:3000/ping.png?cache=' + Date.now();
+        }
+    </script>
     <style>
         .operator-main {
             padding: 40px 5%;
@@ -205,6 +216,7 @@
                         <th>Type</th>
                         <th>Date</th>
                         <th>Status</th>
+                        <th>Payment</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -214,14 +226,6 @@
             </table>
         </div>
 
-        <div class="pagination-controls"
-            style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 20px; border-radius: 8px; box-shadow: var(--shadow-subtle);">
-            <div id="paginationInfo" style="font-size: 0.9rem; color: #64748b;">Showing 0 to 0 of 0 applications</div>
-            <div style="display: flex; gap: 10px;">
-                <button id="prevPage" class="btn-small" style="background: #e2e8f0; color: #475569;">Previous</button>
-                <button id="nextPage" class="btn-small" style="background: #e2e8f0; color: #475569;">Next</button>
-            </div>
-        </div>
 
         <div id="printArea" class="print-only">
             <!-- Content will be injected here during print -->

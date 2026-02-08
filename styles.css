@@ -504,13 +504,68 @@ footer {
     transform: rotate(90deg);
 }
 
-.apps-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
-    padding: 2.5rem;
+.apps-container {
+    padding: 1rem 2.5rem 2.5rem;
     max-height: 75vh;
-    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.user-apps-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-size: 0.9rem;
+}
+
+.user-apps-table th,
+.user-apps-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.user-apps-table th {
+    background: #f8fafc;
+    color: var(--primary-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.user-apps-table tr:hover {
+    background: #f1f5f9;
+}
+
+.action-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.table-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition: all 0.2s;
+}
+
+.table-btn.primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.table-btn.secondary {
+    background: #e2e8f0;
+    color: var(--primary-color);
+}
+
+.table-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
 }
 
 .app-card {
@@ -577,6 +632,29 @@ footer {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.payment-badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-paid {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.status-unpaid {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.status-waived {
+    background: #f3f4f6;
+    color: #4b5563;
 }
 
 .status-pending {

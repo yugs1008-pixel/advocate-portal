@@ -1,3 +1,13 @@
+// --- AUTO-SERVER REDIRECT ---
+if (window.location.protocol === 'file:') {
+    const ping = new Image();
+    ping.onload = () => {
+        const page = window.location.pathname.split('/').pop() || 'login.html';
+        window.location.href = 'http://localhost:3000/' + page;
+    };
+    ping.src = 'http://localhost:3000/ping.png?cache=' + Date.now();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Session Check
     const user = JSON.parse(localStorage.getItem('advocate_user'));
@@ -187,12 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error('Fetch Error:', err);
             appsList.innerHTML = `
-                <div class="no-apps" style="color: #e74c3c;">
+                <div class="no-apps">
                     <div class="empty-icon">⚠️</div>
-                    <h3>Server Connection Lost</h3>
-                    <p>Could not sync your applications. Please ensure you are accessing the site via 
-                       <a href="http://localhost:3000" style="color: var(--primary-color); text-decoration: underline; font-weight: 700;">http://localhost:3000</a>
-                    </p>
+                    <h3>Connection Issue</h3>
+                    <p>Unable to connect to the legal chamber server. Please check if your backend is active or if there is a database configuration error.</p>
+                    <button onclick="location.reload()" class="btn secondary" style="margin-top: 1rem;">Retry Connection</button>
                 </div>`;
         }
     }
@@ -209,7 +218,23 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        appsList.innerHTML = apps.map(app => {
+        let tableHtml = `
+            <table class="user-apps-table">
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Billing Name</th>
+                        <th>Bill Amount</th>
+                        <th>Bill No.</th>
+                        <th>Type</th>
+                        <th>Payment</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        tableHtml += apps.map(app => {
             const date = new Date(app.submissionTime).toLocaleDateString('en-IN', {
                 day: 'numeric',
                 month: 'short',
@@ -218,67 +243,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 minute: '2-digit'
             });
 
-            const statusClass = app.paymentStatus.toLowerCase() === 'completed' ? 'status-completed' :
-                (app.paymentStatus.toLowerCase() === 'cancelled' ? 'status-cancelled' : 'status-pending');
-
-            // Handle real attachments from data
-            let attachmentHTML = '';
-            if (app.data.attachments && app.data.attachments.length > 0) {
-                const firstImg = app.data.attachments.find(a => /\.(jpg|jpeg|png|gif|webp)$/i.test(a.path));
-                const thumbSrc = firstImg ? firstImg.path : 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=400&q=80';
-
-                attachmentHTML = `
-                    <img src="${thumbSrc}" alt="Attachment Preview" class="app-thumbnail">
-                    <div class="attachment-links" style="margin-bottom: 1rem; font-size: 0.8rem;">
-                        <strong>📎 Attachments:</strong><br>
-                        ${app.data.attachments.map(a => `<a href="${a.path}" target="_blank" style="color: blue; text-decoration: underline; margin-right: 0.5rem;">${a.name}</a>`).join(' ')}
-                    </div>
-                `;
-            } else {
-                attachmentHTML = `<img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=400&q=80" alt="Legal Doc" class="app-thumbnail">`;
-            }
+            const paymentStatus = app.payment_status || 'Unpaid';
+            const statusClass = paymentStatus.toLowerCase() === 'paid' ? 'status-paid' : 'status-unpaid';
 
             return `
-                <div class="app-card">
-                    <span class="status-badge ${statusClass}">${app.paymentStatus}</span>
-                    ${attachmentHTML}
-                    <div class="app-type">${app.type}</div>
-                    <div class="app-date">📅 Submitted on ${date}</div>
-                    
-                    <div class="app-info-item">
-                        <span class="app-info-label">Bill On:</span>
-                        <span>${app.data.billOn || 'N/A'}</span>
-                    </div>
-                    <div class="app-info-item">
-                        <span class="app-info-label">Contact:</span>
-                        <span>${app.data.contactPerson || 'N/A'}</span>
-                    </div>
-                    
-                    <div style="margin-top: 1rem; padding: 0.8rem; background: #f8fafc; border-radius: 6px; font-size: 0.85rem;">
-                        <strong>Details:</strong><br>
-                        ${renderAppData(app.data)}
-                    </div>
-
-                    ${app.billAmount ? `
-                    <div style="margin-top: 1rem; padding: 0.8rem; background: #ecfdf5; border: 1px solid #10b981; border-radius: 6px; font-size: 0.85rem;">
-                        <strong style="color: #047857;">Billing Information:</strong><br>
-                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
-                            <span>Bill #: <strong>${app.billNumber}</strong></span>
-                            <span>Amount: <strong>₹${app.billAmount}</strong></span>
-                        </div>
-                        ${app.billAttachment ? `<a href="${app.billAttachment}" target="_blank" style="display: block; margin-top: 8px; color: #059669; font-weight: 600; text-decoration: underline;">📄 View Bill Copy</a>` : ''}
-                    </div>
-                    ` : ''}
-
-                    <div style="display: flex; gap: 10px; margin-top: 1.5rem;">
-                        <button class="view-btn" style="flex: 2; padding: 10px; background: var(--primary-color); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600;" onclick="openFullFormView(${app.id})">View Full Form</button>
+                <tr>
+                    <td>${date}</td>
+                    <td>${app.billOn || '-'}</td>
+                    <td>${app.billAmount ? '₹' + app.billAmount : '-'}</td>
+                    <td>${app.billNumber || '-'}</td>
+                    <td><strong>${app.type}</strong></td>
+                    <td><span class="payment-badge ${statusClass}">${paymentStatus}</span></td>
+                    <td class="action-btns">
+                        <button class="table-btn primary" onclick="openFullFormView(${app.id})">Form</button>
+                        ${app.billAttachment ? `<a href="${app.billAttachment}" target="_blank" class="table-btn secondary">Bill</a>` : ''}
                         ${app.paymentStatus !== 'Completed' && app.paymentStatus !== 'Cancelled' ? `
-                            <button class="cancel-btn" onclick="cancelApplication(${app.id})" style="flex: 1; padding: 10px; background: #fff1f0; color: #cf1322; border: 1px solid #ffa39e; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Cancel</button>
+                            <button class="table-btn" onclick="cancelApplication(${app.id})" style="background: #fee2e2; color: #ef4444;">×</button>
                         ` : ''}
-                    </div>
-                </div>
+                    </td>
+                </tr>
             `;
         }).join('');
+
+        tableHtml += `
+                </tbody>
+            </table>
+        `;
+
+        appsList.innerHTML = tableHtml;
     }
 
     function renderAppData(data) {
@@ -310,7 +302,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div><strong>Reference ID:</strong> #${app.id}</div>
                     <div style="text-align: right;"><strong>Date:</strong> ${date}</div>
                     <div><strong>Service Type:</strong> ${app.type}</div>
-                    <div style="text-align: right;"><strong>Status:</strong> <span style="padding: 2px 8px; border-radius: 4px; background: #eee;">${app.paymentStatus}</span></div>
+                    <div style="text-align: right;">
+                        <strong>Status:</strong> <span style="padding: 2px 8px; border-radius: 4px; background: #eee;">${app.paymentStatus}</span><br>
+                        <strong style="margin-top: 5px; display: inline-block;">Payment:</strong> <span style="padding: 2px 8px; border-radius: 4px; background: #eee;">${app.payment_status || 'Unpaid'}</span>
+                    </div>
                 </div>
 
                 <div style="background: #f8fafc; padding: 20px; border-radius: 6px;">

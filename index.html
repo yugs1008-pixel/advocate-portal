@@ -12,6 +12,17 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap"
         rel="stylesheet">
+    <script>
+        // --- ROBUST AUTO-REDIRECT TO SERVER ---
+        if (window.location.protocol === 'file:') {
+            const ping = new Image();
+            ping.onload = () => {
+                console.log('🚀 Server detected! Redirecting...');
+                window.location.href = 'http://localhost:3000/app';
+            };
+            ping.src = 'http://localhost:3000/ping.png?cache=' + Date.now();
+        }
+    </script>
 </head>
 
 <body>
@@ -139,6 +150,7 @@
                             <input type="text" id="billOn" name="billOn" placeholder="Company/Individual">
                         </div>
 
+
                         <div class="form-group">
                             <label for="contactPerson">Client Contact Person</label>
                             <input type="text" id="contactPerson" name="contactPerson" placeholder="Name">
@@ -202,6 +214,7 @@
 
 
 
+
                         <div class="form-group">
                             <label for="bulkBillOn">Bill Required On</label>
                             <input type="text" id="bulkBillOn" name="billOn" placeholder="Entity Name">
@@ -243,6 +256,7 @@
                             <label for="notaryBillOn">Bill Required On</label>
                             <input type="text" id="notaryBillOn" name="billOn" placeholder="Entity Name">
                         </div>
+
 
                         <div class="form-group">
                             <label for="notaryContactPerson">Contact Person</label>
@@ -294,8 +308,8 @@
                 <span class="close-modal"
                     onclick="document.getElementById('appsModal').style.display='none'">&times;</span>
             </div>
-            <div id="appsList" class="apps-grid">
-                <!-- Applications will be loaded here -->
+            <div id="appsList" class="apps-container">
+                <!-- Applications will be loaded here as a table -->
                 <div class="loading-spinner">Loading your applications...</div>
             </div>
         </div>
