@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 </div>
                                 <div style="flex: 1;">
                                     <label style="display:block; font-size: 0.75rem; color: #64748b; margin-bottom: 4px;">Bill Copy (PDF/JPG)</label>
-                                    <input type="file" id="billFile-${app.id}">
+                                    <input type="file" id="billFile-${app.id}" accept=".pdf,.jpg,.jpeg,.png">
                                 </div>
                                 <button class="btn-small btn-save" onclick="updateBilling(${app.id})">Save Bill Info</button>
                             </div>
