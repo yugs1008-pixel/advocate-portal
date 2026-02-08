@@ -86,7 +86,7 @@ if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && proce
                 folder: 'advocate-uploads',
                 allowed_formats: ['jpg', 'png', 'pdf', 'jpeg'],
                 resource_type: 'auto', // Allows PDFs and other file types
-                access_mode: 'public', // Make files publicly accessible
+                type: 'upload', // Use 'upload' type for public access (not 'authenticated')
                 public_id: (req, file) => Date.now() + '-' + file.originalname.replace(/[^a-zA-Z0-9]/g, "_")
             }
         });
