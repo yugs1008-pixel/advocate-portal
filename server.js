@@ -73,22 +73,30 @@ let storage;
 
 // Check if Cloudinary env vars are set
 if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
-    cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET
-    });
+    try {
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+            api_key: process.env.CLOUDINARY_API_KEY,
+            api_secret: process.env.CLOUDINARY_API_SECRET
+        });
 
-    storage = new CloudinaryStorage({
-        cloudinary: cloudinary,
-        params: {
-            folder: 'advocate-uploads',
-            allowed_formats: ['jpg', 'png', 'pdf', 'jpeg'],
-            public_id: (req, file) => Date.now() + '-' + file.originalname.replace(/[^a-zA-Z0-9]/g, "_")
-        }
-    });
-    console.log('☁️  Using Cloudinary Storage');
-} else {
+        storage = new CloudinaryStorage({
+            cloudinary: cloudinary,
+            params: {
+                folder: 'advocate-uploads',
+                allowed_formats: ['jpg', 'png', 'pdf', 'jpeg'],
+                public_id: (req, file) => Date.now() + '-' + file.originalname.replace(/[^a-zA-Z0-9]/g, "_")
+            }
+        });
+        console.log('☁️  Using Cloudinary Storage. Cloud Name:', process.env.CLOUDINARY_CLOUD_NAME);
+    } catch (error) {
+        console.error('❌ Cloudinary Configuration Error:', error.message);
+        console.error('Falling back to local storage due to error.');
+        storage = null; // Will trigger fallback below
+    }
+}
+
+if (!storage) {
     // Fallback to local disk storage
     storage = multer.diskStorage({
         destination: (req, file, cb) => {
@@ -98,7 +106,7 @@ if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && proce
             cb(null, Date.now() + '-' + file.originalname);
         }
     });
-    console.log('📂 Using Local Disk Storage');
+    console.log('📂 Using Local Disk Storage (Fallback)');
 }
 
 const upload = multer({ storage: storage });
