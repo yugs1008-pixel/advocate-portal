@@ -409,8 +409,10 @@ app.post('/api/operator/update-billing', upload.single('billAttachment'), async 
     const { applicationId, billAmount, billNumber, billOn } = req.body;
     let billAttachmentPath = req.file ? req.file.path : null;
 
-    // Normalize path for web URLs (convert backslashes to forward slashes and ensure leading slash)
-    if (billAttachmentPath) {
+    // Normalize path for web URLs
+    // Cloudinary returns full URLs (https://...), local storage returns relative paths (uploads\...)
+    if (billAttachmentPath && !billAttachmentPath.startsWith('http')) {
+        // Local path - convert backslashes to forward slashes and ensure leading slash
         billAttachmentPath = '/' + billAttachmentPath.replace(/\\/g, '/');
     }
 
