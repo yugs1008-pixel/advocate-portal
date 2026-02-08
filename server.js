@@ -65,15 +65,42 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
 }
 
-// Multer Configuration
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
+// Cloudinary Configuration
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+let storage;
+
+// Check if Cloudinary env vars are set
+if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+
+    storage = new CloudinaryStorage({
+        cloudinary: cloudinary,
+        params: {
+            folder: 'advocate-uploads',
+            allowed_formats: ['jpg', 'png', 'pdf', 'jpeg'],
+            public_id: (req, file) => Date.now() + '-' + file.originalname.replace(/[^a-zA-Z0-9]/g, "_")
+        }
+    });
+    console.log('☁️  Using Cloudinary Storage');
+} else {
+    // Fallback to local disk storage
+    storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, uploadDir);
+        },
+        filename: (req, file, cb) => {
+            cb(null, Date.now() + '-' + file.originalname);
+        }
+    });
+    console.log('📂 Using Local Disk Storage');
+}
+
 const upload = multer({ storage: storage });
 
 // Middleware
@@ -234,7 +261,7 @@ app.post('/api/submit-form', upload.array('attachments'), async (req, res) => {
     if (req.files && req.files.length > 0) {
         applicationData.attachments = req.files.map(file => ({
             name: file.originalname,
-            path: '/uploads/' + file.filename
+            path: file.path // Cloudinary returns URL in file.path, Multer disk returns local path
         }));
     }
 
@@ -372,7 +399,7 @@ app.post('/api/operator/update-payment-status', async (req, res) => {
 
 app.post('/api/operator/update-billing', upload.single('billAttachment'), async (req, res) => {
     const { applicationId, billAmount, billNumber, billOn } = req.body;
-    let billAttachmentPath = req.file ? '/uploads/' + req.file.filename : null;
+    let billAttachmentPath = req.file ? req.file.path : null;
 
     try {
         let query = 'UPDATE applications SET "billAmount" = $1, "billNumber" = $2, "billOn" = $3';
