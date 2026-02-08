@@ -227,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <th>Bill Amount</th>
                         <th>Bill No.</th>
                         <th>Type</th>
+                        <th>Status</th>
                         <th>Payment</th>
                         <th>Actions</th>
                     </tr>
@@ -245,6 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const paymentStatus = app.payment_status || 'Unpaid';
             const statusClass = paymentStatus.toLowerCase() === 'paid' ? 'status-paid' : 'status-unpaid';
+            const appStatus = app.paymentStatus || 'Pending'; // This column is actually 'paymentStatus' in DB, confused naming in code but used as app status
 
             return `
                 <tr>
@@ -253,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${app.billAmount ? '₹' + app.billAmount : '-'}</td>
                     <td>${app.billNumber || '-'}</td>
                     <td><strong>${app.type}</strong></td>
+                    <td><span class="payment-badge" style="background: #e2e8f0; color: #334155;">${appStatus}</span></td>
                     <td><span class="payment-badge ${statusClass}">${paymentStatus}</span></td>
                     <td class="action-btns">
                         <button class="table-btn primary" onclick="openFullFormView(${app.id})">Form</button>
