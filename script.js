@@ -210,11 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 appsList.innerHTML = `<div class="no-apps">Failed to load applications (Error ${response.status}).</div>`;
             }
         } catch (err) {
-            console.error('Fetch Error:', err);
+            console.error('Fetch Error Details:', err);
+            console.error('Stack:', err.stack);
             appsList.innerHTML = `
                 <div class="no-apps">
                     <div class="empty-icon">⚠️</div>
                     <h3>Connection Issue</h3>
+                    <p>Error details: ${err.message}</p>
                     <p>Unable to connect to the legal chamber server.</p>
                     <button onclick="location.reload()" class="btn secondary" style="margin-top: 1rem;">Retry Connection</button>
                 </div>`;
