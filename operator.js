@@ -53,14 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderOperatorTable() {
-        if (applications.length === 0) {
-            operatorList.innerHTML = `<tr><td colspan="6" class="no-apps-table">No applications found ${currentSearch ? 'matching your search' : 'in the system yet'}.</td></tr>`;
-            updatePaginationUI();
+    function renderOperatorTable(appsToRender = applications) {
+        if (appsToRender.length === 0) {
+            operatorList.innerHTML = `<tr><td colspan="7" class="no-apps-table">No applications found matching your criteria.</td></tr>`;
             return;
         }
 
-        operatorList.innerHTML = applications.map(app => {
+        operatorList.innerHTML = appsToRender.map(app => {
             const date = new Date(app.submissionTime).toLocaleString('en-IN');
 
             return `
@@ -126,6 +125,34 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('');
     }
+
+    // Filter Logic for Operator Dashboard
+    window.filterOperatorTable = function () {
+        const fId = document.getElementById('filterId').value.toLowerCase();
+        const fEmail = document.getElementById('filterEmail').value.toLowerCase();
+        const fType = document.getElementById('filterType').value.toLowerCase();
+        const fDate = document.getElementById('filterDate').value.toLowerCase();
+        const fStatus = document.getElementById('filterStatus').value;
+        const fPayment = document.getElementById('filterPayment').value;
+
+        const filtered = applications.filter(app => {
+            const id = (app.id || '').toString().toLowerCase();
+            const email = (app.userEmail || '').toLowerCase();
+            const type = (app.type || '').toLowerCase();
+            const date = new Date(app.submissionTime).toLocaleString('en-IN').toLowerCase();
+            const status = (app.paymentStatus || 'Pending');
+            const payment = (app.payment_status || 'Unpaid');
+
+            return id.includes(fId) &&
+                email.includes(fEmail) &&
+                type.includes(fType) &&
+                date.includes(fDate) &&
+                (fStatus === "" || status === fStatus) &&
+                (fPayment === "" || payment === fPayment);
+        });
+
+        renderOperatorTable(filtered);
+    };
 
     // Pagination Listeners Removed
 

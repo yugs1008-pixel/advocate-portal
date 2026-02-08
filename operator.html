@@ -217,7 +217,37 @@
                         <th>Date</th>
                         <th>Status</th>
                         <th>Payment</th>
-                        <th>Action</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr class="filter-row" style="background: #eef2f7;">
+                        <th><input type="text" id="filterId" placeholder="ID" onkeyup="filterOperatorTable()"
+                                style="width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px;"></th>
+                        <th><input type="text" id="filterEmail" placeholder="Email" onkeyup="filterOperatorTable()"
+                                style="width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px;"></th>
+                        <th><input type="text" id="filterType" placeholder="Type" onkeyup="filterOperatorTable()"
+                                style="width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px;"></th>
+                        <th><input type="text" id="filterDate" placeholder="Date" onkeyup="filterOperatorTable()"
+                                style="width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px;"></th>
+                        <th>
+                            <select id="filterStatus" onchange="filterOperatorTable()"
+                                style="width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                                <option value="">All</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </th>
+                        <th>
+                            <select id="filterPayment" onchange="filterOperatorTable()"
+                                style="width: 100%; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                                <option value="">All</option>
+                                <option value="Unpaid">Unpaid</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Waived">Waived</option>
+                            </select>
+                        </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="operatorList">
@@ -234,4 +264,3 @@
 
     <script src="operator.js"></script>
 </body>
-
