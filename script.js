@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.openFullFormView = (id) => {
-        const app = userApplications.find(a => a.id === id);
+        const app = allUserApplications.find(a => a.id === id);
         if (!app) return;
 
         const content = document.getElementById('fullFormContent');
