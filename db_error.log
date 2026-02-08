@@ -1,0 +1,4 @@
+AggregateError [ECONNREFUSED]: 
+    at C:\Users\yugs5\Downloads\Advocate\node_modules\pg-pool\index.js:45:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async initDB (C:\Users\yugs5\Downloads\Advocate\server.js:53:25)

@@ -9,6 +9,17 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap"
         rel="stylesheet">
+    <script>
+        // --- ROBUST AUTO-REDIRECT TO SERVER ---
+        if (window.location.protocol === 'file:') {
+            const ping = new Image();
+            ping.onload = () => {
+                console.log('🚀 Server detected! Redirecting...');
+                window.location.href = 'http://localhost:3000/operator.html';
+            };
+            ping.src = 'http://localhost:3000/ping.png?cache=' + Date.now();
+        }
+    </script>
     <style>
         .operator-main {
             padding: 40px 5%;
@@ -205,6 +216,7 @@
                         <th>Type</th>
                         <th>Date</th>
                         <th>Status</th>
+                        <th>Payment</th>
                         <th>Action</th>
                     </tr>
                 </thead>

@@ -579,6 +579,29 @@ footer {
     letter-spacing: 0.5px;
 }
 
+.payment-badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-paid {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.status-unpaid {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.status-waived {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
 .status-pending {
     background: #fffbeb;
     color: #92400e;

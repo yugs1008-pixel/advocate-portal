@@ -1,3 +1,13 @@
+// --- AUTO-SERVER REDIRECT ---
+if (window.location.protocol === 'file:') {
+    const ping = new Image();
+    ping.onload = () => {
+        const page = window.location.pathname.split('/').pop() || 'login.html';
+        window.location.href = 'http://localhost:3000/' + page;
+    };
+    ping.src = 'http://localhost:3000/ping.png?cache=' + Date.now();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Session Check
     const user = JSON.parse(localStorage.getItem('advocate_user'));
@@ -187,12 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error('Fetch Error:', err);
             appsList.innerHTML = `
-                <div class="no-apps" style="color: #e74c3c;">
+                <div class="no-apps">
                     <div class="empty-icon">⚠️</div>
-                    <h3>Server Connection Lost</h3>
-                    <p>Could not sync your applications. Please ensure you are accessing the site via 
-                       <a href="http://localhost:3000" style="color: var(--primary-color); text-decoration: underline; font-weight: 700;">http://localhost:3000</a>
-                    </p>
+                    <h3>Connection Issue</h3>
+                    <p>Unable to connect to the legal chamber server. Please check if your backend is active or if there is a database configuration error.</p>
+                    <button onclick="location.reload()" class="btn secondary" style="margin-top: 1rem;">Retry Connection</button>
                 </div>`;
         }
     }
@@ -240,7 +249,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             return `
                 <div class="app-card">
-                    <span class="status-badge ${statusClass}">${app.paymentStatus}</span>
+                    <div style="position: absolute; top: 15px; right: 15px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                        <span class="status-badge ${statusClass}">${app.paymentStatus}</span>
+                        <span class="payment-badge status-${app.payment_status ? app.payment_status.toLowerCase() : 'unpaid'}">${app.payment_status || 'Unpaid'}</span>
+                    </div>
                     ${attachmentHTML}
                     <div class="app-type">${app.type}</div>
                     <div class="app-date">📅 Submitted on ${date}</div>
@@ -310,7 +322,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div><strong>Reference ID:</strong> #${app.id}</div>
                     <div style="text-align: right;"><strong>Date:</strong> ${date}</div>
                     <div><strong>Service Type:</strong> ${app.type}</div>
-                    <div style="text-align: right;"><strong>Status:</strong> <span style="padding: 2px 8px; border-radius: 4px; background: #eee;">${app.paymentStatus}</span></div>
+                    <div style="text-align: right;">
+                        <strong>Status:</strong> <span style="padding: 2px 8px; border-radius: 4px; background: #eee;">${app.paymentStatus}</span><br>
+                        <strong style="margin-top: 5px; display: inline-block;">Payment:</strong> <span style="padding: 2px 8px; border-radius: 4px; background: #eee;">${app.payment_status || 'Unpaid'}</span>
+                    </div>
                 </div>
 
                 <div style="background: #f8fafc; padding: 20px; border-radius: 6px;">

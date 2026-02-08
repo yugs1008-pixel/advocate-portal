@@ -10,6 +10,18 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
         rel="stylesheet">
+    <script>
+        // --- ROBUST AUTO-REDIRECT TO SERVER ---
+        if (window.location.protocol === 'file:') {
+            const ping = new Image();
+            ping.onload = () => {
+                const page = window.location.pathname.split('/').pop() || 'login.html';
+                console.log('🚀 Server detected! Redirecting...');
+                window.location.href = 'http://localhost:3000/' + page;
+            };
+            ping.src = 'http://localhost:3000/ping.png?cache=' + Date.now();
+        }
+    </script>
     <style>
         :root {
             --primary-color: #1a2a44;

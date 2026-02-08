@@ -1,3 +1,12 @@
+// --- AUTO-SERVER REDIRECT ---
+if (window.location.protocol === 'file:') {
+    const ping = new Image();
+    ping.onload = () => {
+        window.location.href = 'http://localhost:3000/operator.html';
+    };
+    ping.src = 'http://localhost:3000/ping.png?cache=' + Date.now();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const operatorList = document.getElementById('operatorList');
     const operatorSearch = document.getElementById('operatorSearch');
@@ -33,11 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Fetch error:', err);
             operatorList.innerHTML = `
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 3rem; color: #e74c3c;">
-                        <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
-                        <strong style="display: block; margin-bottom: 0.5rem;">Server is Unreachable (Offline)</strong>
-                        Please ensure the server is running and access this dashboard via:<br>
-                        <a href="http://localhost:3000/operator.html" style="color: blue; text-decoration: underline; font-weight: 600;">http://localhost:3000/operator.html</a>
+                    <td colspan="6" style="text-align: center; padding: 3rem; color: #64748b;">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">⚠️</div>
+                        <strong style="display: block; margin-bottom: 0.5rem; font-size: 1.2rem;">Server Connection Issue</strong>
+                        Unable to reach the backend services. Please ensure the server is running and database configuration is correct.
+                        <br><br>
+                        <button onclick="location.reload()" class="btn-small" style="background: var(--primary-color); color: white;">Retry System Check</button>
                     </td>
                 </tr>`;
         }
@@ -67,10 +77,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             <option value="Cancelled" ${app.paymentStatus === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
                         </select>
                     </td>
+                    <td>
+                        <select class="status-select" onchange="updatePaymentStatus(${app.id}, this.value)">
+                            <option value="Unpaid" ${app.payment_status === 'Unpaid' ? 'selected' : ''}>Unpaid</option>
+                            <option value="Paid" ${app.payment_status === 'Paid' ? 'selected' : ''}>Paid</option>
+                            <option value="Waived" ${app.payment_status === 'Waived' ? 'selected' : ''}>Waived</option>
+                        </select>
+                    </td>
                     <td><span class="expand-btn" onclick="toggleDetails(${app.id})">Details ➕</span></td>
                 </tr>
                 <tr id="details-${app.id}" class="detail-row">
-                    <td colspan="6">
+                    <td colspan="7">
                         <div style="padding: 1.5rem; line-height: 1.6;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
@@ -180,6 +197,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (err) {
             console.error('Update status error:', err);
+        }
+    };
+
+    window.updatePaymentStatus = async (id, newPaymentStatus) => {
+        try {
+            const response = await fetch('/api/operator/update-payment-status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ applicationId: id, payment_status: newPaymentStatus })
+            });
+
+            if (response.ok) {
+                console.log(`Payment status of #${id} updated to ${newPaymentStatus}`);
+            } else {
+                alert('Failed to update payment status.');
+            }
+        } catch (err) {
+            console.error('Update payment status error:', err);
         }
     };
 
