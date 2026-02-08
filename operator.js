@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <button class="btn-small btn-save" onclick="updateBilling(${app.id})">Save Bill Info</button>
                             </div>
                             
-                            ${app.billAttachment ? `<div style="margin-top: 10px; font-size: 0.8rem;"><a href="${app.billAttachment}" target="_blank" style="color: #059669;">✅ Bill Uploaded: View Bill Copy</a></div>` : ''}
+                            ${app.billAttachment ? `<div style="margin-top: 10px; font-size: 0.8rem; display: flex; align-items: center; gap: 10px;"><a href="${app.billAttachment}" target="_blank" style="color: #059669;">✅ Bill Uploaded: View Bill Copy</a><button onclick="removeBill(${app.id})" style="padding: 4px 8px; background: #fee2e2; color: #dc2626; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75rem;">🗑️ Remove</button></div>` : ''}
                         </div>
                     </td>
                 </tr>
@@ -276,6 +276,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (err) {
             console.error('Billing update error:', err);
+        }
+    };
+
+    window.removeBill = async (id) => {
+        if (!confirm('Are you sure you want to remove this bill attachment? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/operator/remove-bill', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ applicationId: id })
+            });
+
+            if (response.ok) {
+                alert('Bill removed successfully!');
+                fetchAllApplications(); // Refresh the table
+            } else {
+                const err = await response.json();
+                alert('Failed to remove bill: ' + (err.error || 'Server error'));
+            }
+        } catch (err) {
+            console.error('Remove Bill Error:', err);
+            alert('Network error while removing bill.');
         }
     };
 

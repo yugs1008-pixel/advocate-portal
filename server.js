@@ -437,6 +437,19 @@ app.post('/api/operator/update-billing', upload.single('billAttachment'), async 
     }
 });
 
+// Remove bill attachment
+app.post('/api/operator/remove-bill', async (req, res) => {
+    const { applicationId } = req.body;
+
+    try {
+        const query = 'UPDATE applications SET "billAttachment" = NULL WHERE id = $1';
+        await dbQuery(query, [applicationId]);
+        res.status(200).json({ message: 'Bill removed successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 const { runBackup } = require('./backup');
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
