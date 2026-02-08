@@ -213,43 +213,21 @@
                     <tr>
                         <th style="font-size: 0.75rem;">Date</th>
                         <th style="font-size: 0.75rem;">ID</th>
+                        <th style="font-size: 0.75rem;">Status</th>
+                        <th style="font-size: 0.75rem;">Type</th>
                         <th style="font-size: 0.75rem;">Bill No.</th>
                         <th style="font-size: 0.75rem;">Billing Name</th>
                         <th style="font-size: 0.75rem;">Amount</th>
-                        <th style="font-size: 0.75rem;">Payment</th>
                         <th style="font-size: 0.75rem;">Name</th>
                         <th style="font-size: 0.75rem;">Phone</th>
                         <th style="font-size: 0.75rem;">Email</th>
-                        <th style="font-size: 0.75rem;">Status</th>
-                        <th style="font-size: 0.75rem;">Type</th>
+                        <th style="font-size: 0.75rem;">Payment</th>
                         <th style="font-size: 0.75rem;">Action</th>
                     </tr>
                     <tr class="filter-row" style="background: #eef2f7;">
                         <th><input type="text" id="filterDate" placeholder="Date" onkeyup="filterOperatorTable()"
                                 style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
                         <th><input type="text" id="filterId" placeholder="ID" onkeyup="filterOperatorTable()"
-                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
-                        <th><input type="text" id="filterBilNum" placeholder="No." onkeyup="filterOperatorTable()"
-                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
-                        <th><input type="text" id="filterBilName" placeholder="Bill Name"
-                                onkeyup="filterOperatorTable()" style="width: 100%; padding: 2px; font-size: 0.7em;">
-                        </th>
-                        <th><input type="text" id="filterBilAmt" placeholder="Amt" onkeyup="filterOperatorTable()"
-                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
-                        <th>
-                            <select id="filterPayment" onchange="filterOperatorTable()"
-                                style="width: 100%; padding: 2px; font-size: 0.7em;">
-                                <option value="">All</option>
-                                <option value="Unpaid">Unpaid</option>
-                                <option value="Paid">Paid</option>
-                                <option value="Waived">Waived</option>
-                            </select>
-                        </th>
-                        <th><input type="text" id="filterName" placeholder="Name" onkeyup="filterOperatorTable()"
-                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
-                        <th><input type="text" id="filterPhone" placeholder="Phone" onkeyup="filterOperatorTable()"
-                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
-                        <th><input type="text" id="filterEmail" placeholder="Email" onkeyup="filterOperatorTable()"
                                 style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
                         <th>
                             <select id="filterStatus" onchange="filterOperatorTable()"
@@ -263,6 +241,28 @@
                         </th>
                         <th><input type="text" id="filterType" placeholder="Type" onkeyup="filterOperatorTable()"
                                 style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
+                        <th><input type="text" id="filterBilNum" placeholder="No." onkeyup="filterOperatorTable()"
+                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
+                        <th><input type="text" id="filterBilName" placeholder="Bill Name"
+                                onkeyup="filterOperatorTable()" style="width: 100%; padding: 2px; font-size: 0.7em;">
+                        </th>
+                        <th><input type="text" id="filterBilAmt" placeholder="Amt" onkeyup="filterOperatorTable()"
+                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
+                        <th><input type="text" id="filterName" placeholder="Name" onkeyup="filterOperatorTable()"
+                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
+                        <th><input type="text" id="filterPhone" placeholder="Phone" onkeyup="filterOperatorTable()"
+                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
+                        <th><input type="text" id="filterEmail" placeholder="Email" onkeyup="filterOperatorTable()"
+                                style="width: 100%; padding: 2px; font-size: 0.7em;"></th>
+                        <th>
+                            <select id="filterPayment" onchange="filterOperatorTable()"
+                                style="width: 100%; padding: 2px; font-size: 0.7em;">
+                                <option value="">All</option>
+                                <option value="Unpaid">Unpaid</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Waived">Waived</option>
+                            </select>
+                        </th>
                         <th></th>
                     </tr>
                 </thead>

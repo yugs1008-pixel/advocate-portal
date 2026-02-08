@@ -71,19 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr data-id="${app.id}">
                     <td>${date}</td>
                     <td>${app.id}</td>
-                    <td>${billNo}</td>
-                    <td>${billName}</td>
-                    <td>${billAmt}</td>
-                    <td>
-                        <select class="status-select" onchange="updatePaymentStatus(${app.id}, this.value)">
-                            <option value="Unpaid" ${app.payment_status === 'Unpaid' ? 'selected' : ''}>Unpaid</option>
-                            <option value="Paid" ${app.payment_status === 'Paid' ? 'selected' : ''}>Paid</option>
-                            <option value="Waived" ${app.payment_status === 'Waived' ? 'selected' : ''}>Waived</option>
-                        </select>
-                    </td>
-                    <td>${userName}</td>
-                    <td>${userPhone}</td>
-                    <td><strong>${app.userEmail}</strong></td>
                     <td>
                         <select class="status-select ${app.paymentStatus === 'Cancelled' ? 'status-cancelled' : ''}" onchange="updateAppStatus(${app.id}, this.value)">
                             <option value="Pending" ${app.paymentStatus === 'Pending' ? 'selected' : ''}>Pending</option>
@@ -93,6 +80,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         </select>
                     </td>
                     <td>${app.type}</td>
+                    <td>${billNo}</td>
+                    <td>${billName}</td>
+                    <td>${billAmt}</td>
+                    <td>${userName}</td>
+                    <td>${userPhone}</td>
+                    <td><strong>${app.userEmail}</strong></td>
+                    <td>
+                        <select class="status-select" onchange="updatePaymentStatus(${app.id}, this.value)">
+                            <option value="Unpaid" ${app.payment_status === 'Unpaid' ? 'selected' : ''}>Unpaid</option>
+                            <option value="Paid" ${app.payment_status === 'Paid' ? 'selected' : ''}>Paid</option>
+                            <option value="Waived" ${app.payment_status === 'Waived' ? 'selected' : ''}>Waived</option>
+                        </select>
+                    </td>
                     <td><span class="expand-btn" onclick="toggleDetails(${app.id})">Details ➕</span></td>
                 </tr>
                 <tr id="details-${app.id}" class="detail-row">
