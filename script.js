@@ -183,14 +183,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let userApplications = []; // Global within DOMContentLoaded
 
+    // Global variable to store all fetched applications for filtering
+    let allUserApplications = [];
+
     async function fetchUserApplications() {
+        const user = JSON.parse(localStorage.getItem('advocate_user'));
+        const appsList = document.getElementById('appsList');
         appsList.innerHTML = '<div class="loading-spinner">Fetching your legal applications...</div>';
 
         try {
             const response = await fetch(`/api/applications?userEmail=${user.email}`);
             if (response.ok) {
-                userApplications = await response.json();
-                renderApplications(userApplications);
+                allUserApplications = await response.json();
+                renderApplications(allUserApplications);
             } else {
                 appsList.innerHTML = `<div class="no-apps">Failed to load applications (Error ${response.status}).</div>`;
             }
@@ -205,6 +210,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>`;
         }
     }
+
+    // Filter Logic attached to window to be accessible from HTML
+    window.filterApplications = function () {
+        const filter = document.getElementById('statusFilter').value;
+        if (filter === 'All') {
+            renderApplications(allUserApplications);
+        } else {
+            const filtered = allUserApplications.filter(app => {
+                const status = app.paymentStatus || 'Pending';
+                return status === filter;
+            });
+            renderApplications(filtered);
+        }
+    };
 
     function renderApplications(apps) {
         if (apps.length === 0) {
