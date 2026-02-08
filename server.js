@@ -409,6 +409,11 @@ app.post('/api/operator/update-billing', upload.single('billAttachment'), async 
     const { applicationId, billAmount, billNumber, billOn } = req.body;
     let billAttachmentPath = req.file ? req.file.path : null;
 
+    // Normalize path for web URLs (convert backslashes to forward slashes and ensure leading slash)
+    if (billAttachmentPath) {
+        billAttachmentPath = '/' + billAttachmentPath.replace(/\\/g, '/');
+    }
+
     try {
         let query = 'UPDATE applications SET "billAmount" = $1, "billNumber" = $2, "billOn" = $3';
         let params = [billAmount, billNumber, billOn];
