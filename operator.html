@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -235,4 +236,251 @@
     <script src="operator.js"></script>
 </body>
 
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Dashboard | Advocate Practice</title>
+    <link rel="stylesheet" href="styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <script>
+        // --- ROBUST AUTO-REDIRECT TO SERVER ---
+        if (window.location.protocol === 'file:') {
+            const ping = new Image();
+            ping.onload = () => {
+                console.log('🚀 Server detected! Redirecting...');
+                window.location.href = 'http://localhost:3000/operator.html';
+            };
+            ping.src = 'http://localhost:3000/ping.png?cache=' + Date.now();
+        }
+    </script>
+    <style>
+        .operator-main {
+            padding: 40px 5%;
+            background-color: #f0f4f8;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--primary-color);
+        }
+
+        .search-bar {
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            width: 300px;
+            font-family: inherit;
+        }
+
+        .operator-table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-subtle);
+            overflow: hidden;
+        }
+
+        .operator-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .operator-table th,
+        .operator-table td {
+            padding: 18px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .operator-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-row {
+            font-size: 0.85rem;
+            display: none;
+            background: #f9fbff;
+        }
+
+        .expand-btn {
+            cursor: pointer;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .status-select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+
+        .attachment-link {
+            display: block;
+            margin-bottom: 4px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .attachment-link:hover {
+            text-decoration: underline;
+        }
+
+        .status-cancelled {
+            background: #fff1f0;
+            color: #cf1322;
+            border: 1px solid #ffa39e;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .billing-form {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .billing-form input {
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: none;
+            transition: background 0.2s;
+        }
+
+        .btn-save {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-print {
+            background: #64748b;
+            color: white;
+            margin-top: 1rem;
+        }
+
+        .btn-save:hover {
+            background: #2c3e50;
+        }
+
+        .btn-print:hover {
+            background: #475569;
+        }
+
+        @media print {
+
+            header,
+            .dashboard-header,
+            .operator-table-container,
+            .billing-form,
+            .btn-print {
+                display: none !important;
+            }
+
+            .print-only {
+                display: block !important;
+            }
+
+            #printArea {
+                padding: 20px;
+                color: black;
+            }
+        }
+
+        .print-only {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">Advocate <span>Practice</span></div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><span style="color: var(--accent-gold); font-weight: 600;">Operator Dashboard</span></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="operator-main">
+        <div class="dashboard-header">
+            <h1>All Submitted Applications</h1>
+            <input type="text" id="operatorSearch" class="search-bar" placeholder="Search by email or type...">
+        </div>
+
+        <div class="operator-table-container">
+            <table class="operator-table" id="operatorTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User Email</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="operatorList">
+                    <!-- Loaded dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-controls"
+            style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 20px; border-radius: 8px; box-shadow: var(--shadow-subtle);">
+            <div id="paginationInfo" style="font-size: 0.9rem; color: #64748b;">Showing 0 to 0 of 0 applications</div>
+            <div style="display: flex; gap: 10px;">
+                <button id="prevPage" class="btn-small" style="background: #e2e8f0; color: #475569;">Previous</button>
+                <button id="nextPage" class="btn-small" style="background: #e2e8f0; color: #475569;">Next</button>
+            </div>
+        </div>
+
+        <div id="printArea" class="print-only">
+            <!-- Content will be injected here during print -->
+        </div>
+    </main>
+
+    <script src="operator.js"></script>
+</body>
+
+>>>>>>> 7276d1c6dc206531c5e51ce117e737d3d41522f5
 </html>
