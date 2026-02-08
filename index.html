@@ -307,18 +307,6 @@
                 <span class="close-modal"
                     onclick="document.getElementById('appsModal').style.display='none'">&times;</span>
             </div>
-            <div class="filter-bar"
-                style="padding: 0 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
-                <label for="statusFilter" style="font-weight: 600; color: #334155;">Filter Status:</label>
-                <select id="statusFilter" onchange="filterApplications()"
-                    style="padding: 5px 10px; border: 1px solid #cbd5e1; border-radius: 4px;">
-                    <option value="All">All Applications</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                </select>
-            </div>
             <div id="appsList" class="apps-container">
                 <!-- Applications will be loaded here as a table -->
                 <div class="loading-spinner">Loading your applications...</div>

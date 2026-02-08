@@ -183,19 +183,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let userApplications = []; // Global within DOMContentLoaded
 
-    // Global variable to store all fetched applications for filtering
     let allUserApplications = [];
 
     async function fetchUserApplications() {
         const user = JSON.parse(localStorage.getItem('advocate_user'));
         const appsList = document.getElementById('appsList');
-        appsList.innerHTML = '<div class="loading-spinner">Fetching your legal applications...</div>';
+
+        // Initial loading state only if table doesn't exist
+        if (!document.getElementById('appsTableBody')) {
+            appsList.innerHTML = '<div class="loading-spinner">Fetching your legal applications...</div>';
+        }
 
         try {
             const response = await fetch(`/api/applications?userEmail=${user.email}`);
             if (response.ok) {
                 allUserApplications = await response.json();
-                renderApplications(allUserApplications);
+
+                // If table structure doesn't exist, create it
+                if (!document.getElementById('appsTableBody')) {
+                    renderAppTableStructure();
+                }
+
+                // Update rows with fetched data
+                updateAppTableRows(allUserApplications);
             } else {
                 appsList.innerHTML = `<div class="no-apps">Failed to load applications (Error ${response.status}).</div>`;
             }
@@ -205,39 +215,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="no-apps">
                     <div class="empty-icon">⚠️</div>
                     <h3>Connection Issue</h3>
-                    <p>Unable to connect to the legal chamber server. Please check if your backend is active or if there is a database configuration error.</p>
+                    <p>Unable to connect to the legal chamber server.</p>
                     <button onclick="location.reload()" class="btn secondary" style="margin-top: 1rem;">Retry Connection</button>
                 </div>`;
         }
     }
 
-    // Filter Logic attached to window to be accessible from HTML
-    window.filterApplications = function () {
-        const filter = document.getElementById('statusFilter').value;
-        if (filter === 'All') {
-            renderApplications(allUserApplications);
-        } else {
-            const filtered = allUserApplications.filter(app => {
-                const status = app.paymentStatus || 'Pending';
-                return status === filter;
-            });
-            renderApplications(filtered);
-        }
-    };
-
-    function renderApplications(apps) {
-        if (apps.length === 0) {
-            appsList.innerHTML = `
-                <div class="no-apps">
-                    <div class="empty-icon">📂</div>
-                    <h3>No Applications Yet</h3>
-                    <p>You haven't submitted any legal applications yet. Start by filling out an e-stamp or notary form.</p>
-                </div>
-            `;
-            return;
-        }
-
-        let tableHtml = `
+    // Render static table structure with filter inputs
+    function renderAppTableStructure() {
+        const appsList = document.getElementById('appsList');
+        appsList.innerHTML = `
             <table class="user-apps-table">
                 <thead>
                     <tr>
@@ -250,11 +237,77 @@ document.addEventListener('DOMContentLoaded', () => {
                         <th>Payment</th>
                         <th>Actions</th>
                     </tr>
+                    <tr class="filter-row" style="background: #f8fafc;">
+                        <th><input type="text" id="filterDate" placeholder="Filter Date" onkeyup="filterAllColumns()" style="width: 100%; padding: 4px; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 4px;"></th>
+                        <th><input type="text" id="filterName" placeholder="Filter Name" onkeyup="filterAllColumns()" style="width: 100%; padding: 4px; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 4px;"></th>
+                        <th><input type="text" id="filterAmount" placeholder="Filter Amount" onkeyup="filterAllColumns()" style="width: 100%; padding: 4px; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 4px;"></th>
+                        <th><input type="text" id="filterBillNo" placeholder="Filter No." onkeyup="filterAllColumns()" style="width: 100%; padding: 4px; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 4px;"></th>
+                        <th><input type="text" id="filterType" placeholder="Filter Type" onkeyup="filterAllColumns()" style="width: 100%; padding: 4px; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 4px;"></th>
+                        <th>
+                            <select id="filterStatus" onchange="filterAllColumns()" style="width: 100%; padding: 4px; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+                                <option value="">All</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </th>
+                         <th>
+                            <select id="filterPayment" onchange="filterAllColumns()" style="width: 100%; padding: 4px; font-size: 0.8rem; border: 1px solid #cbd5e1; border-radius: 4px;">
+                                <option value="">All</option>
+                                <option value="Paid">Paid</option>
+                                <option value="Unpaid">Unpaid</option>
+                            </select>
+                        </th>
+                        <th></th>
+                    </tr>
                 </thead>
-                <tbody>
+                <tbody id="appsTableBody"></tbody>
+            </table>
         `;
+    }
 
-        tableHtml += apps.map(app => {
+    // Filter Logic: Filters based on all inputs (AND logic)
+    window.filterAllColumns = function () {
+        const fDate = document.getElementById('filterDate').value.toLowerCase();
+        const fName = document.getElementById('filterName').value.toLowerCase();
+        const fAmount = document.getElementById('filterAmount').value.toLowerCase();
+        const fBillNo = document.getElementById('filterBillNo').value.toLowerCase();
+        const fType = document.getElementById('filterType').value.toLowerCase();
+        const fStatus = document.getElementById('filterStatus').value;
+        const fPayment = document.getElementById('filterPayment').value;
+
+        const filtered = allUserApplications.filter(app => {
+            const dateStr = new Date(app.submissionTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }).toLowerCase();
+            const name = (app.billOn || '').toLowerCase();
+            const amount = (app.billAmount ? '₹' + app.billAmount : '').toLowerCase();
+            const billNo = (app.billNumber || '').toLowerCase();
+            const type = (app.type || '').toLowerCase();
+            const status = (app.paymentStatus || 'Pending'); // Case sensitive check for dropdown
+            const payment = (app.payment_status || 'Unpaid'); // Case sensitive check for dropdown
+
+            return dateStr.includes(fDate) &&
+                name.includes(fName) &&
+                amount.includes(fAmount) &&
+                billNo.includes(fBillNo) &&
+                type.includes(fType) &&
+                (fStatus === "" || status === fStatus) &&
+                (fPayment === "" || payment === fPayment);
+        });
+
+        updateAppTableRows(filtered);
+    };
+
+    // Updates only the table rows (tbody)
+    function updateAppTableRows(apps) {
+        const tbody = document.getElementById('appsTableBody');
+
+        if (apps.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 2rem;">No applications match your filter.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = apps.map(app => {
             const date = new Date(app.submissionTime).toLocaleDateString('en-IN', {
                 day: 'numeric',
                 month: 'short',
@@ -265,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const paymentStatus = app.payment_status || 'Unpaid';
             const statusClass = paymentStatus.toLowerCase() === 'paid' ? 'status-paid' : 'status-unpaid';
-            const appStatus = app.paymentStatus || 'Pending'; // This column is actually 'paymentStatus' in DB, confused naming in code but used as app status
+            const appStatus = app.paymentStatus || 'Pending';
 
             return `
                 <tr>
@@ -286,13 +339,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 </tr>
             `;
         }).join('');
+    }
 
-        tableHtml += `
-                </tbody>
-            </table>
-        `;
-
-        appsList.innerHTML = tableHtml;
+    // Legacy function wrapper for compatibility if needed, or just removed
+    function renderApplications(apps) {
+        if (!document.getElementById('appsTableBody')) {
+            renderAppTableStructure();
+        }
+        updateAppTableRows(apps);
     }
 
     function renderAppData(data) {
