@@ -63,6 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const date = new Date(app.submissionTime).toLocaleString('en-IN');
             const userName = app.fullName || '-';
             const userPhone = app.phoneNumber || '-';
+            const billName = app.billOn || '-';
+            const billAmt = app.billAmount ? '₹' + app.billAmount : '-';
+            const billNo = app.billNumber || '-';
 
             return `
                 <tr data-id="${app.id}">
@@ -70,6 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><strong>${app.userEmail}</strong></td>
                     <td>${userName}</td>
                     <td>${userPhone}</td>
+                    <td>${billName}</td>
+                    <td>${billAmt}</td>
+                    <td>${billNo}</td>
                     <td>${app.type}</td>
                     <td>${date}</td>
                     <td>
@@ -90,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><span class="expand-btn" onclick="toggleDetails(${app.id})">Details ➕</span></td>
                 </tr>
                 <tr id="details-${app.id}" class="detail-row">
-                    <td colspan="9">
+                    <td colspan="12">
                         <div style="padding: 1.5rem; line-height: 1.6;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
@@ -136,6 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const fEmail = document.getElementById('filterEmail').value.toLowerCase();
         const fName = document.getElementById('filterName').value.toLowerCase();
         const fPhone = document.getElementById('filterPhone').value.toLowerCase();
+        const fBilName = document.getElementById('filterBilName').value.toLowerCase();
+        const fBilAmt = document.getElementById('filterBilAmt').value.toLowerCase();
+        const fBilNum = document.getElementById('filterBilNum').value.toLowerCase();
         const fType = document.getElementById('filterType').value.toLowerCase();
         const fDate = document.getElementById('filterDate').value.toLowerCase();
         const fStatus = document.getElementById('filterStatus').value;
@@ -146,6 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = (app.userEmail || '').toLowerCase();
             const name = (app.fullName || '').toLowerCase();
             const phone = (app.phoneNumber || '').toString().toLowerCase();
+            const bName = (app.billOn || '').toLowerCase();
+            const bAmt = (app.billAmount || '').toString().toLowerCase();
+            const bNum = (app.billNumber || '').toLowerCase();
             const type = (app.type || '').toLowerCase();
             const date = new Date(app.submissionTime).toLocaleString('en-IN').toLowerCase();
             const status = (app.paymentStatus || 'Pending');
@@ -155,6 +167,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 email.includes(fEmail) &&
                 name.includes(fName) &&
                 phone.includes(fPhone) &&
+                bName.includes(fBilName) &&
+                bAmt.includes(fBilAmt) &&
+                bNum.includes(fBilNum) &&
                 type.includes(fType) &&
                 date.includes(fDate) &&
                 (fStatus === "" || status === fStatus) &&
